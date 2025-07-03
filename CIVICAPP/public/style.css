@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #8d0cad;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+:root {
+  --bg-color: #0f2027;
+  --text-color: #e2e749;
+  --input-bg: #1e2a38;
+  --accent-color: #00e5ff;
+  --card-bg: #1f2b59;
+}
+
+.light-mode {
+  --bg-color: #f3f4f6;
+  --text-color: #1a1a1a;
+  --input-bg: #ffffff;
+  --accent-color: #007aff;
+  --card-bg: #f9fafb;
+}
+
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 100px 30px 40px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(14px);
+  transition: all 0.3s ease-in-out;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #00e5ff;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+form label {
+  display: block;
+  margin-top: 20px;
+  color: #aad6ff;
+  font-size: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+input[type="file"],
+select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 12px;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #00e676;
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.4);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  margin-top: 25px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #00e5ff, #00bcd4);
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #003746;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0,229,255,0.3);
+}
+
+button:hover {
+  background: linear-gradient(to right, #00bcd4, #00e5ff);
+  transform: translateY(-2px);
+}
+
+
+.tab-bar button.nav-btn:hover {
+  background-color: #0097a7;
+}
+
+.tab-bar #logoutBtn {
+  background-color: #e53935;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.tab-bar #logoutBtn:hover {
+  background-color: #d32f2f;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 30px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #00e676;
+}
+
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+
+

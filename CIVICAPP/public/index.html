@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civic Reporter App</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --bg-color: #0f2027;
+      --text-color: #e2e749;
+      --input-bg: #1e2a38;
+      --accent-color: #00e5ff;
+      --card-bg: #1f2b59;
+    }
+
+    .light-mode {
+      --bg-color: #f3f4f6;
+      --text-color: #1a1a1a;
+      --input-bg: #ffffff;
+      --accent-color: #007aff;
+      --card-bg: #f9fafb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 100px 30px 40px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(14px);
+      transition: all 0.3s ease-in-out;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00e5ff;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    form label {
+      display: block;
+      margin-top: 20px;
+      color: #aad6ff;
+      font-size: 15px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: 1px solid var(--accent-color);
+      border-radius: 12px;
+      outline: none;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #00e676;
+      box-shadow: 0 0 10px rgba(0, 230, 118, 0.4);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, #00e5ff, #00bcd4);
+      border: none;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 16px;
+      color: #003746;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,229,255,0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #00bcd4, #00e5ff);
+      transform: translateY(-2px);
+    }
+
+    nav#navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #101c28;
+      padding: 12px 24px;
+      border-radius: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background-color: #00bcd4;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background-color: #0097a7;
+    }
+
+    #logoutBtn {
+      background-color: #f44336 !important;
+    }
+
+    .theme-toggle-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 10px 0;
+    }
+
+    .theme-label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="welcomeHeading" class="welcome-text">👋 Welcome to the Civic Issue Reporting App</h1>
+
+    <div id="loginForm" class="auth-container">
+      <h2>Login</h2>
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <label><input type="checkbox" id="adminCheckbox" /> LOGIN AS ADMIN</label>
+      <button id="loginBtn">Login</button>
+      <p>Don’t have an account? <a href="#" id="showSignup">Create one</a></p>
+    </div>
+
+    <div class="theme-toggle-wrapper">
+      <label for="themeToggle" class="theme-label">Light Mode</label>
+      <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <nav id="navbar" style="display: none;">
+      <button class="nav-btn" onclick="showTab('reportTab')">Report New Issue</button>
+      <button class="nav-btn" onclick="showTab('submittedTab')">Reported Issues</button>
+      <button class="nav-btn" onclick="showTab('profileTab')">My Profile</button>
+      <button id="logoutBtn" class="nav-btn">Logout</button>
+    </nav>
+
+    <form id="issueForm" class="tab" data-tab="reportTab" style="display:none;">
+      <h2>Report an Issue</h2>
+      <select id="issueType" required>
+        <option value="">Select issue type</option>
+        <option value="Garbage">Garbage</option>
+        <option value="Road Damage">Road Damage</option>
+        <option value="Street Light">Street Light</option>
+      </select>
+      <input type="text" id="location" placeholder="Location" required />
+      <textarea id="description" placeholder="Description" required></textarea>
+      <input type="file" id="image" accept="image/*" required />
+      <img id="previewImage" style="display:none; max-width:50;margin-top:10px;" />
+      <input type="hidden" id="latitude" />
+      <input type="hidden" id="longitude" />
+      <div id="map" style="height: 250px; margin-top: 10px;"></div>
+      <button type="submit">Submit Report</button>
+    </form>
+
+    <div id="reportList" class="tab" data-tab="submittedTab" style="display:none;"></div>
+
+    <div id="profileSection" class="tab" data-tab="profileTab" style="display:none;">
+      <h2>My Profile</h2>
+      <p><strong>UID:</strong> <span id="profileUID"></span></p>
+      <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+    </div>
+
+    <div id="successBox" style="display:none; margin-top: 20px;">
+      <h3>✅ Your issue has been submitted!</h3>
+      <button onclick="showFormAgain()">Submit another</button>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="loader" class="loader" style="display:none;"></div>
+    <div id="confirmToast" class="confirm-toast" style="display:none;">
+      <p>Are you sure you want to delete this report?</p>
+      <button id="confirmYes">Yes</button>
+      <button id="confirmNo">No</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</body>
+</html>
+
+
+
+
+
